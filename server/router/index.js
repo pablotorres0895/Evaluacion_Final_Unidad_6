@@ -28,5 +28,40 @@ router.get('/filters',(req, res)=>{
             res.json({ "error": true, "error": error })
         })
 });
+router.get('/city/:city/type/:type/min/:min/max/:max', (req, res)=>{
+    let parameters = req.params
+    storage.GetAllInfo()
+        .then((data) => {
+            let typeFilters = []
+            let cityFilters = []
+            // first get all houses in that range
+            let pricesFilters = data.filter((d)=>{
+                return Number(d.Precio.replace('$','').replace(',','')) >= parameters.min && 
+                    Number(d.Precio.replace('$','').replace(',','')) <= parameters.max
+            })
+            // second get all types or type selected
+            if (parameters.type == 'all'){
+                typeFilters = pricesFilters
 
-module.exports= router;
+            }else{
+                typeFilters = pricesFilters.filter((d)=>{
+                    return d.Tipo === parameters.type
+                })
+            }
+            // finally we filter city or get all
+            if (parameters.city == 'all'){
+                cityFilters = typeFilters
+
+            }else{
+                cityFilters = typeFilters.filter((d)=>{
+                    return d.Ciudad === parameters.city
+                })
+            }
+            res.json({ "error": false, "datos": cityFilters })
+        })
+        .catch((error) => {
+            res.json({ "error": true, "error": error })
+        })
+})
+
+module.exports= router

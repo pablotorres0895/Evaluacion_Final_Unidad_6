@@ -8,11 +8,21 @@ $("#rangoPrecio").ionRangeSlider({
   to: 20000,
   prefix: "$"
 })
-
 // events 
 $('#buscar').click(function() {
-  let url = '';
+  let url = ''
   if ($("#checkPersonalizada")[0].checked){
+
+    let range = $("#rangoPrecio").val()
+    range = range.split(';')
+
+    let city = $("#ciudad").val(),
+      type = $("#tipo").val()
+
+    if (city === '') city = 'all'
+    if (type === '') type = 'all'
+    
+    url = `http://localhost:3000/search/city/${city}/type/${type}/min/${range[0]}/max/${range[1]}`
     //console.log($("#checkPersonalizada")[0].checked)
   }else{
     url = "http://localhost:3000/search"
