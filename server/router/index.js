@@ -1,7 +1,7 @@
-const router = require('express').Router(),
-    path = require("path")
+const router = require('express').Router()
+    
 
 router.get('/',(req, res)=>{
-    res.sendFile(path.join());
+    res.send('<h2>Esta es la respuesta inicial</h2>');
 });
 module.exports= router;
